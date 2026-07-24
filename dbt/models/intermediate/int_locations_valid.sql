@@ -24,8 +24,14 @@ select
     c.actual_readings,
     round(100 * c.coverage, 1) as coverage_pct,
     round(c.coverage, 4) as coverage_frac,
-    coverage_frac >= {{ var('valid_params')['min_coverage_frac'] }}
-        and actual_readings > {{ var('valid_params')['min_readings'] }}
-        as is_valid
+    (coverage_frac >= {{ var('valid_params')['min_coverage_frac'] }})
+    and 
+    (actual_readings > {{ var('valid_params')['min_readings'] }})
+    and
+    (location_id not in (
+        {% for location_id in var('valid_params')['excluded_location_ids'] %}
+            '{{ location_id }}'{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    )) as is_valid
 from coverage c
 join duration d using (location_id)

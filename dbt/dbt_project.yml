@@ -18,10 +18,15 @@ vars:
   valid_params:
     min_readings: 24*60
     min_coverage_frac: 0.5
+    excluded_location_ids:
+      - c52b6116
+      - a80d7ed9
 
 models:
   airelibre_analytics:
+    staging:
+      +materialized: view
     intermediate:
-      +materialized: table
+      +materialized: table # set to ephemeral later
     marts:
       +materialized: table

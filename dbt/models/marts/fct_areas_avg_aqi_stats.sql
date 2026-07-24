@@ -1,6 +1,8 @@
 with avg_aqi_stats as (
     select
         area_id,
+        sum(contributing_locations) count,
+        sum(contributing_total_locations) total_count,
         min(avg_aqi) as min_avg_aqi,
         max(avg_aqi) as max_avg_aqi,
         median(avg_aqi) as median_avg_aqi,
@@ -18,6 +20,8 @@ areas as (
 select
     area_id,
     a.area_label,
+    s.count,
+    s.total_count,   
     s.min_avg_aqi,
     s.max_avg_aqi,
     round(s.median_avg_aqi,1) median_avg_aqi,

@@ -1,0 +1,7 @@
+min_aqi,max_aqi,category,description,categoria,descripcion,color_hex
+0,50,Good,Air quality is satisfactory,Libre,Calidad de aire satisfactoria,#00e400
+51,100,Moderate,Acceptable but some pollutants,Maso,Calidad de aire aceptable con mínima contaminación,#ffff00
+101,150,Unhealthy for Sensitive Groups,Sensitive people affected,No tan bien,Insalubre para personas sensibles,#ff7e00
+151,200,Unhealthy,Everyone may experience effects,Insalubre,Riesgo general a la salud,#ff0000
+201,300,Very Unhealthy,Health alert,Muy Insalubre,Alerta sanitaria,#8f3f97
+301,500,Hazardous,Emergency conditions,Peligroso,Condiciones de emergencia,#7e0023
