@@ -9,6 +9,6 @@ def fetch_areas() -> pd.DataFrame:
     with db_connection() as con:
         return con.query("""
         SELECT *
-        FROM main.int_areas
+        FROM main.dim_areas
         WHERE max_distance_from_asucentro_km IS NOT NULL
         """).df()

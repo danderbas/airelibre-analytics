@@ -80,9 +80,6 @@ def show_some_units():
         (df["spatial_grain"] == "location") & (df["in_selected_date_range"])
     ].index[0:6]
     df.loc[target_indices, "show"] = True
-    # st.session_state["units_index"] = df.index.to_list()
-    # st.session_state["units"] = df
-    # no need for this actually
 
 
 def update_units_in_selected_date_range():
@@ -94,7 +91,6 @@ def update_units_in_selected_date_range():
     df["in_selected_date_range"] = (date_range_start < df["last_dt"].dt.date) & (
         df["first_dt"].dt.date < date_range_end
     )
-    st.session_state["units"] = df
 
 
 def update_config(widget_key, *config_keys):
@@ -157,7 +153,6 @@ def init_sidebar():
         with col_from:
             widget_key = "w_date_range_start"
             widget_label = "from"
-            # config_keys = ("date_range", "start")
             # reqired to set initial value (avoids conflict between widgetkey and value)
             if widget_key not in st.session_state:
                 st.session_state[widget_key] = st.session_state.config["date_range"][
@@ -173,7 +168,6 @@ def init_sidebar():
         with col_to:
             widget_key = "w_date_range_end"
             widget_label = "to"
-            # config_keys = ("date_range", "end")
             if widget_key not in st.session_state:
                 st.session_state[widget_key] = st.session_state.config["date_range"][
                     "end"
@@ -187,6 +181,7 @@ def init_sidebar():
             )
 
         st.markdown("<br><br>", unsafe_allow_html=True)
+
         col_units, col_aqi = st.columns([1, 1])
 
         with col_units:

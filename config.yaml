@@ -1,4 +1,3 @@
-# config.yaml
 paths:
   raw_dir: "data/raw"
   db_path: "data/airelibre_dw.duckdb"
@@ -8,7 +7,7 @@ paths:
 ingestion:
   start_datetime: "2020-11-01T00:00:00Z"
   end_datetime: null # null = collect up to now, otherwise choose an end date
-  delta_hours: 1 # standard (fixed, do not change)
+  delta_hours: 1 # standard (FIXED, DO NOT CHANGE)
   requests:
     api_url: "https://api.airelib.re/api/v1/aqi"
     max_retries: 3

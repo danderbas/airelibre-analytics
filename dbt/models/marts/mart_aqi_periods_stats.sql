@@ -39,15 +39,5 @@ select
     avg_aqi,
     std_aqi
 from {{ ref('fct_areas_avg_aqi_periods_stats')}}
-join int_areas a
+join {{ ref('int_areas') }} a
 using (area_id)
-
-
-/*
-    join con las otras cosas
-    como hice en el anterior
-
-    -- ? agregar aqi_stats como time_grain inf o null para poner stats generales????
-
-    --se puede!
-*/

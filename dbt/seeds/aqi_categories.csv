@@ -1,7 +1,0 @@
-min_aqi,max_aqi,category,description,color_hex
-0,50,Good,Air quality is satisfactory,#00e400
-51,100,Moderate,Acceptable but some pollutants,#ffff00
-101,150,Unhealthy for Sensitive Groups,Sensitive people affected,#ff7e00
-151,200,Unhealthy,Everyone may experience effects,#ff0000
-201,300,Very Unhealthy,Health alert,#8f3f97
-301,500,Hazardous,Emergency conditions,#7e0023

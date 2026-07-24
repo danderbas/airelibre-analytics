@@ -1,0 +1,27 @@
+services:
+  dashboard:
+    build: .
+    image: airelibre-analytics:latest
+    command: streamlit run src/dashboard/app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    environment:
+      - CONFIG_PATH=/app/config.yaml
+      - PYTHONPATH=/app
+      - DUCKDB_PATH=/app/data/airelibre.duckdb
+    restart: always
+
+  pipeline:
+    build: .
+    image: airelibre-analytics:latest
+    command: make all
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    environment:
+      - CONFIG_PATH=/app/config.yaml
+      - DBT_PROFILES_DIR=/app/dbt
+      - DUCKDB_PATH=/app/data/airelibre.duckdb

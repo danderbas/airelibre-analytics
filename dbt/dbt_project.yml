@@ -9,6 +9,7 @@ seed-paths: ["seeds"]
 clean-targets:
   - "target"
   - "dbt_packages"
+  - "logs"
   
 vars:
   delta_dt_h: 1
@@ -18,7 +19,7 @@ vars:
   valid_params:
     min_readings: 24*60
     min_coverage_frac: 0.5
-    excluded_location_ids:
+    excluded_location_ids: # badly-calibrated sensors, apparently
       - c52b6116
       - a80d7ed9
 
@@ -27,6 +28,7 @@ models:
     staging:
       +materialized: view
     intermediate:
-      +materialized: table # set to ephemeral later
+      +materialized: ephemeral
     marts:
       +materialized: table
+

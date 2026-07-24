@@ -14,13 +14,13 @@ def fetch() -> pd.DataFrame:
 
     with db_connection() as con:
         return con.query(f"""
-            SELECT
-                *,
-                STRFTIME(period_start, '%Y-%m-%d')
-                    AS date_key
-            FROM main.mart_aqi_periods_stats
-            WHERE time_grain = '{temporal_granularity}'
-                AND period_start >= '{date_start.strftime("%Y-%m-%d")}'
-                AND period_end <= '{date_end.strftime("%Y-%m-%d")}'
-            ORDER BY period_start
+        SELECT
+            *,
+            STRFTIME(period_start, '%Y-%m-%d')
+                AS date_key
+        FROM main.mart_aqi_periods_stats
+        WHERE time_grain = '{temporal_granularity}'
+            AND period_start >= '{date_start.strftime("%Y-%m-%d")}'
+            AND period_end <= '{date_end.strftime("%Y-%m-%d")}'
+        ORDER BY period_start
         """).df()

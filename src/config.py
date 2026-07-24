@@ -20,6 +20,11 @@ def _load_config() -> dict:
     with open(config_path) as f:
         config = yaml.safe_load(f)
 
+    def override_db_path_with_env_var():
+        config["paths"]["db_path"] = os.environ.get(
+            "DUCKDB_PATH",
+            config["paths"]["db_path"])
+
     def initialize_directories():
         Path(config["paths"]["raw_dir"]).mkdir(parents=True, exist_ok=True)
         Path(config["paths"]["db_path"]).parent.mkdir(parents=True, exist_ok=True)
@@ -60,6 +65,8 @@ def _load_config() -> dict:
     START_DATETIME, END_DATETIME = align_datetimes_to_hour()
 
     verify_assertions()
+
+    override_db_path_with_env_var()
 
     return config, START_DATETIME, END_DATETIME
 
