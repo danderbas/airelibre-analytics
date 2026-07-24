@@ -5,16 +5,15 @@ Data pipeline + dashboard for historical Air Quality Index (AQI) data, from the 
 ```mermaid
 graph LR
     API(["Raw<br>API Data"]) 
-    --> E["`*Python*
-    Extract`"]
+    --> E["`*Python*<br>Extract`"]
     E --> DUCKDB
     
     subgraph DUCKDB [DuckDB Database]
         direction LR
-        STG["*Python*<br>Load, Staging & Core Build"] --> dbt["*dbt*<br>Modeling & Marts"]
+        STG["`*Python*<br>Load, Staging & Core Build`"] --> dbt["`*dbt*<br>Modeling & Marts`"]
     end
 
-    dbt --> DASH(["*Streamlit*<br>Dashboard"])
+    dbt --> DASH(["`*Streamlit*<br>Dashboard`"])
 ```
 
 ![Dashboard](./docs/pics/screenshot.png)
@@ -36,13 +35,13 @@ To spin up things locally, you only need to have Docker and `make` installed.
 
 1. Clone the repository:
 ```console
-$ git clone https://github.com/danderbas/airelibre-analytics
+git clone https://github.com/danderbas/airelibre-analytics
 ```
 
 2. Then, 
 ```console
-$ cd airelibre-analytics
-$ make all
+cd airelibre-analytics
+make all
 ```
 This will execute the Docker build, run the data pipeline and serve the dashboard.
 
@@ -86,13 +85,13 @@ After iterating ~~a few times~~, it turned into a multi-schema ELT pipeline, wit
 
 ```mermaid
 graph TD
-    API(Raw API data) --> |"Ingestion<br>**src/pipeline/ingest.py**"|JSONL@{ shape: lin-cyl, label: "Raw JSONL Files" }
-    JSONL --> |"Load<br>**src/pipeline/raw_dump.py**"| A[(raw.readings)]
+    API(Raw API data) --> |"`Ingestion<br>**src/pipeline/ingest.py**`"|JSONL@{ shape: lin-cyl, label: "Raw JSONL Files" }
+    JSONL --> |"`Load<br>**src/pipeline/raw_dump.py**`"| A[(raw.readings)]
 
     subgraph DuckDB Database
         subgraph pyblock[" "]
-            A -->|"Cleanup and type casting<br>**src/pipeline/stage.py**"| B[(staging.readings)]
-            B -->|"Surrogate keys & SCDs<br>**src/pipeline/core_build.py**"| C[(core.located_sensors<br>core.readings)]
+            A -->|"`Cleanup and type casting<br>**src/pipeline/stage.py**`"| B[(staging.readings)]
+            B -->|"`Surrogate keys & SCDs<br>**src/pipeline/core_build.py**`"| C[(core.located_sensors<br>core.readings)]
         end
         
         subgraph "dbt"
@@ -103,7 +102,7 @@ graph TD
         end
     end
     
-    G --> |"**src/dashboard/app.py**"| Dash([Dashboard])
+    G --> |"`**src/dashboard/app.py**`"| Dash([Dashboard])
 ```
 
 
