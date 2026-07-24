@@ -16,7 +16,7 @@ locations_distance_from_asucentro as (
         latitude,
         longitude,
         {{ 
-            haversine_distance(
+            distance(
                 'latitude',
                 'longitude',
                 var('loc_asucentro')['lat'],

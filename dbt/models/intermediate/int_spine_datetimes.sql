@@ -8,3 +8,4 @@ select
         )
     ) as dt
 from {{ ref('int_locations_bounds') }}
+order by location_id, dt

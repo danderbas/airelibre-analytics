@@ -15,6 +15,6 @@ select
     l.latitude,
     l.longitude,
     l.area_label,
-    l.area_id
+    l.area_id,
 from {{ ref('stg_locations') }} s
 join locations l using (location_id)

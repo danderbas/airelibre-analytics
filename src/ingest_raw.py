@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 collects sensor data from airelib.re's API (air quality sensor data)
 

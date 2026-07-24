@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 builds core data layer, from staging layer data
 
@@ -108,12 +107,13 @@ def main():
         CREATE OR REPLACE TABLE core.dim_sensors AS
         SELECT * FROM sensors_df;
         """)
+
         con.execute("""
         CREATE OR REPLACE TABLE core.fct_readings AS
         SELECT * FROM readings_df;
         """)
 
-    log.info("populated core layers table: core.dim_sensors and core.fct_readings!")
+    log.info("populated core layers table: core.dim_sensors and core.fct_readings")
 
 
 def coords_match(

@@ -35,7 +35,8 @@ with recursive cum_areas as (
 select
     area_id,
     dt,
-    avg_aqi,
+    round(avg_aqi, 1) avg_aqi,
     contributing_locations,
     contributing_outer_locations
 from cum_areas
+order by area_id, dt

@@ -15,10 +15,13 @@ vars:
   loc_asucentro:
     lat: -25.2968
     lon: -57.6350
+  valid_params:
+    min_readings: 24*60
+    min_coverage_frac: 0.5
 
 models:
   airelibre_analytics:
     intermediate:
-      +materialized: view
+      +materialized: table
     marts:
       +materialized: table

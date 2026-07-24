@@ -11,8 +11,10 @@ period_intervals as (
     select
         area_id,
         d period_start,
-        lead(d) over (partition by area_id order by d)
-            as period_end,
+        lead(d) over (
+            partition by area_id, granularity
+            order by d
+        ) as period_end,
         granularity
     from area_spines
 ),
@@ -47,11 +49,9 @@ select
     s.period_start,
     s.period_end,
     s.granularity,
-    --d.first_dt,
-    --d.last_dt
     s.min_avg_aqi,
     s.max_avg_aqi,
-    s.median_avg_aqi,
+    round(s.median_avg_aqi, 1) median_avg_aqi,
     round(s.avg_avg_aqi, 1) avg_avg_aqi,
     round(s.std_avg_aqi, 1) std_avg_aqi
 from avg_aqi_stats s

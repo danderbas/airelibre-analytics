@@ -2,8 +2,10 @@ with period_intervals as (
     select
         location_id,
         d period_start,
-        lead(d) over (partition by location_id order by d)
-            as period_end,
+        lead(d) over (
+            partition by location_id, granularity
+            order by d
+        ) as period_end,
         granularity
     from {{ ref('int_spine_dates') }}
 ),
@@ -14,7 +16,7 @@ aqi_stats as (
         s.period_end,
         s.granularity,
         count(*) as expected_readings,
-        count(r.aqi) as actual_readings,
+        count(r.aqi) as count_readings,
         1.0 * count(r.aqi) / count(*) as coverage,
         median(r.aqi) as median_aqi,
         min(r.aqi) as min_aqi,
@@ -24,8 +26,8 @@ aqi_stats as (
     from period_intervals as s
     left join {{ ref('int_locations_aqi_grid') }} r
         on s.location_id = r.location_id
-            and s.period_start <= r.dt
-            and r.dt < s.period_end
+            and s.period_start <= r.dt::date
+            and r.dt::date < s.period_end
     where s.period_end is not null
     group by s.location_id, s.period_start, s.period_end, s.granularity
 )
@@ -34,13 +36,14 @@ select
     period_start,
     period_end,
     granularity,
-    expected_readings,
-    actual_readings,
+    count_readings,
     round(avg_aqi, 1) avg_aqi,
-    median_aqi,
-    std_aqi,
+    round(median_aqi, 1) median_aqi,
+    round(std_aqi, 1) std_aqi,
     min_aqi,
     max_aqi,
     round(100 * coverage, 1) as coverage_pct,
     round(coverage, 4) as coverage_frac
-from aqi_stats
+from aqi_stats s
+join {{ ref('int_locations_valid') }} using (location_id)
+where is_valid = true

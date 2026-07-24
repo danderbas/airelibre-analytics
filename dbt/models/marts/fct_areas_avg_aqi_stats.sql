@@ -18,11 +18,9 @@ areas as (
 select
     area_id,
     a.area_label,
-    --d.first_dt,
-    --d.last_dt
     s.min_avg_aqi,
     s.max_avg_aqi,
-    s.median_avg_aqi,
+    round(s.median_avg_aqi,1) median_avg_aqi,
     round(s.avg_avg_aqi, 1) avg_avg_aqi,
     round(s.std_avg_aqi, 1) std_avg_aqi
 from avg_aqi_stats s

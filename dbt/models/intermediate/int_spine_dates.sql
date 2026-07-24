@@ -48,3 +48,4 @@ union all
 
 select * from monthly
 
+order by granularity, location_id, d
