@@ -11,8 +11,24 @@ def fetch_aqi_scale() -> pd.DataFrame:
         SELECT
             *,
             0.5*(min_aqi + max_aqi)
-                as mid_aqi,
+                AS mid_aqi,
             min_aqi::text || ' - ' || max_aqi::text
-                as aqi_range
-        FROM dev.aqi_scale
+                AS aqi_range
+        FROM main.aqi_scale
         """).df()
+
+
+@st.cache_data
+def fetch_units() -> pd.DataFrame:
+    with db_connection() as con:
+        return con.query("""
+        SELECT *
+        FROM main.mart_units
+        ORDER BY spatial_grain, area_label, description
+        """).df()
+
+
+def fetch_time_bounds():
+    df = fetch_units()
+
+    return df["first_dt"].min().date(), df["last_dt"].max().date()

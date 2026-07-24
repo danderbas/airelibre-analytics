@@ -13,8 +13,8 @@ clean-targets:
 vars:
   delta_dt_h: 1
   loc_asucentro:
-    lat: -25.2968
-    lon: -57.6350
+    lat: -25.282108
+    lon: -57.635053
   valid_params:
     min_readings: 24*60
     min_coverage_frac: 0.5

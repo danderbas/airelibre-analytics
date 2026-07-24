@@ -30,7 +30,7 @@ def main():
         con.execute(f"""
             CREATE OR REPLACE TABLE raw.readings AS
             WITH exploded_json AS (
-                SELECT 
+                SELECT
                     start,
                     "end",
                     unnest(data) AS item
@@ -42,7 +42,7 @@ def main():
                     "end",
                     item.source AS "source",
                     item.sensor AS sensor,
-                    item.description as description,
+                    TRIM(BOTH '"' FROM item.description::VARCHAR) AS description,
                     ROUND(CAST(item.latitude AS DOUBLE), {COORD_PRECISION})
                         AS latitude,
                     ROUND(CAST(item.longitude AS DOUBLE), {COORD_PRECISION})
@@ -51,19 +51,19 @@ def main():
                     CAST(item.quality.index AS INTEGER) AS quality_index
                 FROM exploded_json
             )
-            SELECT 
+            SELECT
                 *,
                 (
                     sensor IS NOT NULL AND
-                    "source" IS NOT NULL AND 
+                    "source" IS NOT NULL AND
                     description IS NOT NULL AND
-                    latitude BETWEEN -90 AND 90 AND 
-                    longitude BETWEEN -180 AND 180 AND 
-                    quality_index IS NOT NULL AND 
+                    latitude BETWEEN -90 AND 90 AND
+                    longitude BETWEEN -180 AND 180 AND
+                    quality_index IS NOT NULL AND
                     quality_index BETWEEN 0 AND 500
                 ) AS is_valid_payload,
                 (
-                    latitude BETWEEN -27.5 AND -19.0 AND 
+                    latitude BETWEEN -27.5 AND -19.0 AND
                     longitude BETWEEN -62.5 AND -54.0
                 ) AS is_in_paraguay
             FROM flattened_data;
@@ -71,9 +71,9 @@ def main():
 
         # save clean data to the 'staging' schema
         con.execute("""
-            CREATE OR REPLACE TABLE staging.readings AS 
+            CREATE OR REPLACE TABLE staging.readings AS
             WITH renamed_and_keyed AS (
-                SELECT 
+                SELECT
                     *
                     EXCLUDE (quality_category, is_valid_payload, is_in_paraguay)
                     RENAME (
@@ -86,8 +86,8 @@ def main():
                         longitude as lon,
                         quality_index as aqi
                     )
-                FROM raw.readings 
-                WHERE is_valid_payload = TRUE 
+                FROM raw.readings
+                WHERE is_valid_payload = TRUE
                   AND is_in_paraguay = TRUE
             ),
             deduplicated AS (

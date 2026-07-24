@@ -31,7 +31,7 @@ select
     d.longitude,
     coalesce(r.area_id, max(r.area_id) over () + 1)
         as area_id,
-    coalesce(r.area_label, 'interior')
+    coalesce(r.area_label, 'Interior')
         as area_label,
     round(d.distance_from_asucentro_km, 2)
         as dist_from_asucentro_km

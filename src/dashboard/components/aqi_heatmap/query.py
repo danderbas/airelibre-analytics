@@ -8,8 +8,7 @@ from src.dashboard.utils.db import db_connection
 def fetch() -> pd.DataFrame:
     config = st.session_state.config
 
-    temporal_granularity = config["heatmap"]["granularity"]["temporal"]
-    spatial_granularity = config["heatmap"]["granularity"]["spatial"]
+    temporal_granularity = config["heatmap"]["granularity"]["temporal"].lower()
     date_start = config["date_range"]["start"]
     date_end = config["date_range"]["end"]
 
@@ -19,17 +18,9 @@ def fetch() -> pd.DataFrame:
                 *,
                 STRFTIME(period_start, '%Y-%m-%d')
                     AS date_key
-            FROM {table(temporal_granularity, spatial_granularity)}
-            WHERE granularity = '{temporal_granularity}'
+            FROM main.mart_aqi_periods_stats
+            WHERE time_grain = '{temporal_granularity}'
                 AND period_start >= '{date_start.strftime("%Y-%m-%d")}'
                 AND period_end <= '{date_end.strftime("%Y-%m-%d")}'
             ORDER BY period_start
         """).df()
-
-
-def table(temporal_granularity, spatial_granularity):
-    match spatial_granularity:
-        case "location":
-            return "dev.fct_locations_aqi_periods_stats"
-        case "area":
-            return "dev.fct_areas_avg_aqi_periods_stats"
