@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.egg-info/
+*.egg-info
+.venv
+dist/
+build/
+*.whl
+.git/
+.gitignore
+data/
+logs/
+.ruff_cache/
+dbt/.user.yml
+Makefile

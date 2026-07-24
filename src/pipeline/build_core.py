@@ -17,7 +17,6 @@ output tables:
     - 'core.readings'
 
 (overwrites tables each time, re-run safe)
-
 """
 
 import hashlib
@@ -27,6 +26,7 @@ import duckdb
 import polars as pl
 
 from src.config import CONFIG
+from src.pipeline import log_df_stats
 
 log = logging.getLogger(__name__)
 
@@ -63,7 +63,7 @@ def main():
     # detect location changes and assign located_sensor_ids
     events_with_lsid, located_sensor_rows = assign_located_sensors(events)
     log.info(
-        "detected %d distinct located_sensor(s)",
+        "detected %d locations",
         len(located_sensor_rows),
     )
 
@@ -113,6 +113,8 @@ def main():
         SELECT * FROM readings_df;
         """)
 
+    log_df_stats(__name__, sensors_df, "core.dim_sensors")
+    log_df_stats(__name__, readings_df, "core.fct_readings")
     log.info("populated core layers table: core.dim_sensors and core.fct_readings")
 
 

@@ -16,6 +16,7 @@ def render():
     fig = go.Figure()
 
     df = df[df["spatial_grain"] == "location"]  # to avoid messing up colors later
+
     # just in case nothing is selected, the (geo)map will be still shown
     fig.add_trace(
         go.Scattermap(
@@ -124,8 +125,8 @@ def render():
                 "x1": 1,
                 "y1": 1,
                 "line": {
-                    "color": "#AAAAAA",  # Border color (e.g., light gray)
-                    "width": 1,  # Border thickness
+                    "color": "#AAAAAA",
+                    "width": 1,
                 },
             }
         ],

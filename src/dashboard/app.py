@@ -46,7 +46,6 @@ def main():
 
 def units_column():
     if st.session_state.config["map"]["show"]:
-        # (only show with colors the sensors in current range)
         st.plotly_chart(
             geo_map(),
             width="content",

@@ -9,7 +9,6 @@ log = logging.getLogger(__name__)
 
 
 def main():
-    # Grab our pre-made path objects and strings from the config module exports
     raw_path = Path(CONFIG["paths"]["raw_dir"])
     COORD_PRECISION = CONFIG["staging"]["coord_decimal_precision"]
     DB_PATH = CONFIG["paths"]["db_path"]
@@ -17,16 +16,16 @@ def main():
     jsonl_pattern = str(raw_path / "*.jsonl")
 
     if not any(raw_path.glob("*.jsonl")):
-        log.warning("No JSONL files found in %s", str(raw_path))
+        log.warning("no jsonl files found in %s", str(raw_path))
         return
 
-    log.info("streaming and transforming JSONL files directly through DuckDB...")
+    log.info("staging raw data...")
 
     with duckdb.connect(DB_PATH) as con:
         con.execute("CREATE SCHEMA IF NOT EXISTS raw;")
         con.execute("CREATE SCHEMA IF NOT EXISTS staging;")
 
-        # flatten and ingest everything (into a 'raw' schema) in a single SQL operation!
+        log.info("writing raw.readings table...")
         con.execute(f"""
             CREATE OR REPLACE TABLE raw.readings AS
             WITH exploded_json AS (
@@ -69,7 +68,7 @@ def main():
             FROM flattened_data;
         """)
 
-        # save clean data to the 'staging' schema
+        log.info("writing staging.readings table...")
         con.execute("""
             CREATE OR REPLACE TABLE staging.readings AS
             WITH renamed_and_keyed AS (
@@ -103,7 +102,7 @@ def main():
             WHERE row_num = 1;
         """)
 
-    log.info("done writing raw and staging duckdb tables!")
+    log.info("raw dump and staging completed")
 
 
 if __name__ == "__main__":

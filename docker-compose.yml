@@ -1,27 +1,37 @@
+x-common-variables: &common-vars
+  CONFIG_PATH: /app/config.yaml
+  DUCKDB_PATH: /app/data/airelibre_dw.duckdb
+
 services:
   dashboard:
-    build: .
+    build:
+      context: .
+      args:
+        USER_UID: ${UID:-1000}
+        USER_GID: ${GID:-1000}
     image: airelibre-analytics:latest
-    command: streamlit run src/dashboard/app.py --server.port=8501 --server.address=0.0.0.0
+    command: >
+      streamlit run src/dashboard/app.py
     ports:
       - "8501:8501"
     volumes:
-      - ./logs:/app/logs
-      - ./data:/app/data
+      - .:/app
     environment:
-      - CONFIG_PATH=/app/config.yaml
-      - PYTHONPATH=/app
-      - DUCKDB_PATH=/app/data/airelibre.duckdb
+      <<: *common-vars
+      STREAMLIT_CONFIG_FILE: /app/.streamlit/config.toml
     restart: always
 
   pipeline:
-    build: .
+    build:
+      context: .
+      args:
+        USER_UID: ${UID:-1000}
+        USER_GID: ${GID:-1000}
     image: airelibre-analytics:latest
-    command: make all
+    command: bash run_pipeline.sh
     volumes:
-      - ./logs:/app/logs
-      - ./data:/app/data
+      - .:/app
     environment:
-      - CONFIG_PATH=/app/config.yaml
-      - DBT_PROFILES_DIR=/app/dbt
-      - DUCKDB_PATH=/app/data/airelibre.duckdb
+      <<: *common-vars
+      DBT_PROFILES_DIR: /app/dbt
+      DBT_PROJECT_DIR: /app/dbt

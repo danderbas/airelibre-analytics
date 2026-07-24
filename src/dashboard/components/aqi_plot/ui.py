@@ -15,9 +15,7 @@ def render(df: pd.DataFrame) -> go.Figure:
     show_values = config["plot"]["show_values"]
     show_avg = config["plot"]["show_avg"]
 
-    units: pd.DataFrame = (
-        st.session_state.units  # .reset_index()
-    )  # units visibility and info
+    units: pd.DataFrame = st.session_state.units  # units visibility and info
 
     df = df[
         (df["spatial_grain"] == spatial_granularity)
@@ -26,17 +24,19 @@ def render(df: pd.DataFrame) -> go.Figure:
 
     fig = go.Figure()
 
+    y_val = (
+        "aqi_ravg_" + temporal_granularity_char
+        if temporal_granularity != "hour"
+        else "aqi"
+    )
+
     if show_values:
         for unit, group in df.groupby("id"):
             if units[units["id"] == unit]["show"].item():
                 fig.add_trace(
                     go.Scatter(
                         x=group["dt"],
-                        y=group[
-                            "aqi_ravg_" + temporal_granularity_char
-                            if temporal_granularity != "hour"
-                            else "aqi"
-                        ],
+                        y=group[y_val],
                         mode="lines",
                         name=str(group["description"].unique()[0]),  # for legend
                         line={
@@ -81,27 +81,11 @@ def render(df: pd.DataFrame) -> go.Figure:
         except (AttributeError, KeyError):
             theme_type = "light"
 
-        avg = (
-            df[
-                [
-                    "aqi_ravg_" + temporal_granularity_char
-                    if temporal_granularity != "hour"
-                    else "aqi",
-                    "dt",
-                ]
-            ]
-            .groupby("dt")
-            .mean()
-            .reset_index()
-        )
+        avg = df[[y_val, "dt"]].groupby("dt").mean().reset_index()
         fig.add_trace(
             go.Scatter(
                 x=avg["dt"],
-                y=avg[
-                    "aqi_ravg_" + temporal_granularity_char
-                    if temporal_granularity != "hour"
-                    else "aqi"
-                ],
+                y=avg[y_val],
                 mode="lines",
                 name="Average AQI",  # for legend
                 line={

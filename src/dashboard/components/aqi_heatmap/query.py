@@ -4,7 +4,6 @@ import streamlit as st
 from src.dashboard.utils.db import db_connection
 
 
-# @st.cache_data
 def fetch() -> pd.DataFrame:
     config = st.session_state.config
 

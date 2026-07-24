@@ -1,51 +1,45 @@
-CONFIG = config.yaml
+.DEFAULT_GOAL := help
 
-.PHONY: install ingest stage build-core dbt-run all
+.PHONY: help all build-docker run-pipeline serve-dashboard clean clean-all clean-docker clean-python clean-logs clean-dbt clean-db clean-raw
 
-.DEFAULT_GOAL := all
+help: ## Show this help message
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
-init-logs:
-	@mkdir -p logs
+all: build-docker run-pipeline serve-dashboard ## Build -> Run pipeline -> Serve dashboard 
 
-install:
-	pip install .
+build-docker: ## Build services
+	docker compose build
 
-ingest: init-logs
-	python src/pipeline/ingest.py | tee -a logs/ingest_$(shell date +%Y%m%d).log
+run-pipeline: ## Run the data pipeline: ingestion -> staging -> core -> dbt
+	docker compose run --rm pipeline
 
-stage: init-logs
-	python src/pipeline/stage.py | tee -a logs/stage_$(shell date +%Y%m%d).log
+serve-dashboard: ## Serve the dashboard
+	docker compose up dashboard
 
-build-core: init-logs
-	python src/pipeline/build_core.py | tee -a logs/core_$(shell date +%Y%m%d).log
+clean: clean-docker clean-python clean-logs clean-dbt clean-db ## Clean all (except raw data)
 
-dbt-run:
-	@cd dbt && dbt seed && dbt run
-	
-all: install ingest stage build-core dbt-run
+clean-all: clean clean-raw ## Clean ALL
 
-clean-python:
+clean-docker: ## Stop containers and remove volumes (reset)
+	docker compose down -v
+
+clean-python: ## Clean up python cache files
 	@echo "deleting python caches..."
 	@find . -type f -name "*.pyc" -delete
 	@find . -type d -name "__pycache__" -exec rm -rf {} +
 
-clean-logs:
+clean-logs: ## Clean logs
 	@echo "deleting logs..."
 	@rm -rf logs/*
 
-clean-dbt:
+clean-dbt: ## Clean dbt files
 	@echo "deleting dbt data..."
-	@cd dbt && dbt clean
+	@dbt clean --project-dir dbt --no-clean-project-files-only
 
-clean-db:
+clean-db:  ## Delete DuckDB database
 	@echo "deleting duckdb database..."
-	@rm data/*.duckdb
+	@rm -f data/*.duckdb
 
-clean-raw:
-	@echo "deleting ingested data!"
+clean-raw: ## Delete raw data
+	@echo "deleting ingested data...!"
 	@rm -rf data/raw
-
-clean: clean-python clean-logs clean-dbt clean-db
-	@echo "clean complete (make clean-raw|clean-all to erase raw data)"
-
-clean-all: clean clean-raw

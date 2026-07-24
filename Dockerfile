@@ -1,18 +1,24 @@
-FROM python:3.11-slim
+FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    make \
-    && rm -rf /var/lib/apt/lists/*
+ARG USER_UID=1000
+ARG USER_GID=1000
+
+RUN groupadd -g ${USER_GID} appgroup && \
+    useradd -u ${USER_UID} -g appgroup -m appuser
 
 WORKDIR /app
 
-COPY pyproject.toml Makefile ./
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
+ENV PATH="/app/.venv/bin:$PATH"
 
-ENV PIP_ROOT_USER_ACTION=ignore
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project
 
-RUN make install
+COPY --chown=appuser:appgroup . .
 
-COPY . .
-
-# for the streamlit dashboard
-EXPOSE 8501
+RUN uv sync --frozen 
+    
+USER appuser

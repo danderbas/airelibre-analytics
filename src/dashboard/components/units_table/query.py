@@ -37,10 +37,10 @@ def units_table_df() -> (pd.DataFrame, list):
             "area_label": "Area",
             "first_dt": "From",
             "last_dt": "To",
-            "lifespan_months": "Age (months)",
+            "lifespan_months": "Lifespan [months]",
             "coverage_pct": "Coverage",
-            "latitude": "lat",
-            "longitude": "lon",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
             "device_type": "Device",
         },
         inplace=True,
@@ -54,12 +54,12 @@ def units_table_df() -> (pd.DataFrame, list):
             "Coverage",
             "From",
             "To",
-            "Age (months)",
-            "lat",
-            "lon",
+            "Lifespan [months]",
+            "Latitude",
+            "Longitude",
             "Device",
         ]
         return df[cols], cols[1:]  # columns to disable
     else:
-        cols = ["", "Area", "From", "To", "Age (months)"]
+        cols = ["", "Area", "From", "To", "Lifespan [months]"]
         return df[cols], cols[1:]

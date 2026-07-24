@@ -1,0 +1,13 @@
+[server]
+port = 8501
+address = "0.0.0.0"
+
+[browser]
+serverAddress = "localhost"
+gatherUsageStats = false
+
+[client]
+toolbarMode = "viewer"
+
+[theme]
+base = "dark"

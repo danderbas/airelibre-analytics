@@ -47,7 +47,6 @@ def render(df: pd.DataFrame) -> go.Figure:
             }
             if show_aqi_scale
             else None,
-            # showlegend=True,
             hovertemplate=(
                 f"""
                 <span style='font-size: 150%;'>
