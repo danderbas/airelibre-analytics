@@ -33,8 +33,8 @@ options = {
 default_config = {
     "granularity": {"spatial": "Location"},
     "date_range": {
-        "start": datetime.date(2025, 1, 1),
-        "end": datetime.date(2026, 1, 1),
+        "start": datetime.date(2024, 3, 1),
+        "end": datetime.date(2024, 12, 1),
     },
     "map": {"show": True, "show_locations": True, "show_areas": True},
     "table": {"show": True},

@@ -5,7 +5,11 @@
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
-all: build-docker run-pipeline serve-dashboard ## Build -> Run pipeline -> Serve dashboard 
+all: decompress-data build-docker run-pipeline serve-dashboard ## Build -> Run pipeline -> Serve dashboard 
+
+decompress-data:  ## Decompress sample data
+	@echo "decompressing sample data..."
+	@tar -xzvf ./data/data.tar.gz -C ./data
 
 build-docker: ## Build services
 	docker compose build
@@ -43,3 +47,5 @@ clean-db:  ## Delete DuckDB database
 clean-raw: ## Delete raw data
 	@echo "deleting ingested data...!"
 	@rm -rf data/raw
+	@rm -rf data/extra
+	

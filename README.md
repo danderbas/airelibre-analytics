@@ -61,9 +61,9 @@ some raw data (in the form of JSONL files) is already included in the `data/raw`
 
 ## Project evolution
 
-It [started simple](./readme.md), in the terminal, fetching some data with `curl` and exploring it (before writing any python scripts).
+It [started simple](./docs/markdown/exploration-start.md), in the terminal, fetching some data with `curl` and exploring it (before writing any python scripts).
 
-From there, the main tools for exploration were jupyter [notebooks](../v8/notebooks/) (python, pandas, matplotlib; later polars+duckdb and plotly for the interactive plots).
+From there, the main tools for exploration were jupyter [notebooks](./docs/notebooks) (python, pandas, matplotlib; later polars+duckdb and plotly for the interactive plots).
 
 After iterating ~~a few times~~, it turned into a multi-schema ELT pipeline, with dbt-generated marts at the far end and a dashboard that queries them.
 
