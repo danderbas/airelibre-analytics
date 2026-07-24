@@ -34,12 +34,12 @@ More information on the AireLibre project can be found [here](https://github.com
 To spin up things locally, you only need to have Docker and `make` installed.
 
 1. Clone the repository:
-```console
+```bash
 git clone https://github.com/danderbas/airelibre-analytics
 ```
 
 2. Then, 
-```console
+```bash
 cd airelibre-analytics
 make all
 ```

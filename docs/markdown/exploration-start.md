@@ -8,8 +8,7 @@ const ENDPOINT_AQI = "https://api.airelib.re/api/v1/aqi";
 
 which is used at some point to fetch the URL
 ```js
-  const searchUrl =
-    ENDPOINT_AQI + "?start=" + startUtcDate + "&end=" + endUtcDate;
+const searchUrl = ENDPOINT_AQI + "?start=" + startUtcDate + "&end=" + endUtcDate;
 ```
 
 At first it just tried that, using `curl`.
@@ -27,8 +26,8 @@ end=2026-01-01T01:00:00Z
 ```
 (one hour apart)
 
-```console
-$ curl https://api.airelib.re/api/v1/aqi?start="$start"\&end="$end"
+```bash
+curl https://api.airelib.re/api/v1/aqi?start="$start"\&end="$end"
 ```
 
 <details>
@@ -40,8 +39,6 @@ $ curl https://api.airelib.re/api/v1/aqi?start="$start"\&end="$end"
 </details>
 
 where each item contains the `source` information (`source` seems to identify a sensor, `sensor` would be the device type) and a `quality` object: this contains the AQI (air quality `index`) and its `category`.
-
-
 
 
 If instead of one hour apart, we do this one day apart...
@@ -84,21 +81,29 @@ OK
 
 1 part, whole day:
 
-```console
-$ start=2026-01-01T00:00:00Z && end=2026-01-02T00:00:00Z \
-  && echo 0 24 $(fetch_991219 $start $end)
+```bash
+start=2026-01-01T00:00:00Z
+end=2026-01-02T00:00:00Z
+echo 0 24 $(fetch_991219 $start $end)
+```
 
+```
 00 24 27
 ```
 
 2 parts:
 
-```console
-$ start=2026-01-01T00:00:00Z && end=2026-01-01T12:00:00Z \
-  && echo 0 12 $(fetch_991219 $start $end) \
-  && start=2026-01-01T12:00:00Z && end=2026-01-02T00:00:00Z \
-  && echo 12 24 $(fetch_991219 $start $end)
+```bash
+start=2026-01-01T00:00:00Z
+end=2026-01-01T12:00:00Z
+echo 0 12 $(fetch_991219 $start $end)
 
+start=2026-01-01T12:00:00Z
+end=2026-01-02T00:00:00Z
+echo 12 24 $(fetch_991219 $start $end)
+```
+
+```
 00 12 49
 12 24 4
 ```
@@ -108,16 +113,25 @@ Interesting. The average is `0.5*(49+4) = 26.5`, which (after rounding) equals t
 
 Now 4 parts:
 
-```console
-$ start=2026-01-01T00:00:00Z && end=2026-01-01T06:00:00Z \
-  && echo 00 06 $(fetch_991219 $start $end) \
-  && start=2026-01-01T06:00:00Z && end=2026-01-01T12:00:00Z \
-  && echo 06 12 $(fetch_991219 $start $end) \
-  && start=2026-01-01T12:00:00Z && end=2026-01-01T18:00:00Z \
-  && echo 12 18 $(fetch_991219 $start $end) \
-  && start=2026-01-01T18:00:00Z && end=2026-01-02T00:00:00Z \
-  && echo 18 24 $(fetch_991219 $start $end)
+```bash
+start=2026-01-01T00:00:00Z
+end=2026-01-01T06:00:00Z
+echo 00 06 $(fetch_991219 $start $end)
 
+start=2026-01-01T06:00:00Z
+end=2026-01-01T12:00:00Z
+echo 06 12 $(fetch_991219 $start $end)
+
+start=2026-01-01T12:00:00Z
+end=2026-01-01T18:00:00Z
+echo 12 18 $(fetch_991219 $start $end)
+
+start=2026-01-01T18:00:00Z
+end=2026-01-02T00:00:00Z
+echo 18 24 $(fetch_991219 $start $end)
+```
+
+```
 00 06 64
 06 12 22
 12 18 3
@@ -135,15 +149,16 @@ and we get
 
 Let's try with 1-hour intervals:
 
-```console
-$ for h in $(seq 0 23); do \
-    start=$(date -d "2026-01-01 + $h hour" -uIs | sed 's/+00:00/Z/'); \
-    end=$(date -d "2026-01-01 + $[$h+1] hour" -uIs | sed 's/+00:00/Z/'); \
-    \
-    echo -n "$h $[$h+1] "; \
-    fetch_991219 $start $end; \
-  done
+```bash
+for h in $(seq 0 23); do
+  start=$(date -d "2026-01-01 + $h hour" -uIs | sed 's/+00:00/Z/')
+  end=$(date -d "2026-01-01 + $[$h+1] hour" -uIs | sed 's/+00:00/Z/')
+  echo -n "$h $[$h+1] "
+  fetch_991219 $start $end
+done
+```
 
+```
 0 1 64
 1 2 61
 2 3 55
@@ -171,15 +186,17 @@ $ for h in $(seq 0 23); do \
 ```
 
 We could plot this (with gnuplot for quick explorations), using the start time in the x-axis:
-```console
-$ for h in $(seq 0 23); do \
-    start=$(date -d "2026-01-01 + $h hour" -uIs | sed 's/+00:00/Z/'); \
-    end=$(date -d "2026-01-01 + $[$h+1] hour" -uIs | sed 's/+00:00/Z/'); \
-    \
-    echo -n "$h $[$h+1] "; \
-    fetch_991219 $start $end; \
-  done | gnuplot -e "set terminal dumb; plot '-' u 1:2 notitle"
+```bash
+for h in $(seq 0 23); do
+  start=$(date -d "2026-01-01 + $h hour" -uIs | sed 's/+00:00/Z/')
+  end=$(date -d "2026-01-01 + $[$h+1] hour" -uIs | sed 's/+00:00/Z/')
+  
+  echo -n "$h $[$h+1] "
+  fetch_991219 $start $end
+done | gnuplot -e "set terminal dumb; plot '-' u 1:2 notitle"
+```
 
+```
   140 +--------------------------------------------------------------------+   
       |             +             +            +             +             |   
       |       *                                                            |   
@@ -265,10 +282,12 @@ AQI Range | PM2.5 [$` \mu g / m^3 `$]
 
 (if higher than 500.4, it's reported as 500+)
 
-```console
-$ printf "0 0\n12 50\n35.4 100\n55.4 150\n150.4 200\n250.4 300\n350.4 400\n500.4 500\n" \
-  | gnuplot -e "set terminal dumb; set xlabel 'PM2.5 (ug/m3)'; set ylabel 'AQI'; plot '-' u 1:2 w l notitle"
+```bash
+printf "0 0\n12 50\n35.4 100\n55.4 150\n150.4 200\n250.4 300\n350.4 400\n500.4 500\n" \
+| gnuplot -e "set terminal dumb; set xlabel 'PM2.5 (ug/m3)'; set ylabel 'AQI'; plot '-' u 1:2 w l notitle"
+```
 
+```
      500 +-----------------------------------------------------------------+   
          |          +          +          +          +    ****  +          |   
          |                                            ****                 |   
