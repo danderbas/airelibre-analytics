@@ -2,18 +2,18 @@ sources:
   - name: core
     schema: core
     tables:
-      - name: dim_sensors
+      - name: located_sensors
         columns:
           - name: located_sensor_id
             tests: [unique, not_null]
-      - name: fct_readings
+      - name: readings
         columns:
           - name: lsid
             tests:
               - not_null
               - relationships:
                   arguments:
-                    to: source('core', 'dim_sensors')
+                    to: source('core', 'located_sensors')
                     field: located_sensor_id
                   config:
                     severity: error

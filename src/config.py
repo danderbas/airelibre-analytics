@@ -7,7 +7,7 @@ import yaml
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s | [%(levelname)s] :: %(message)s",
+    format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
@@ -22,8 +22,8 @@ def _load_config() -> dict:
 
     def override_db_path_with_env_var():
         config["paths"]["db_path"] = os.environ.get(
-            "DUCKDB_PATH",
-            config["paths"]["db_path"])
+            "DUCKDB_PATH", config["paths"]["db_path"]
+        )
 
     def initialize_directories():
         Path(config["paths"]["raw_dir"]).mkdir(parents=True, exist_ok=True)

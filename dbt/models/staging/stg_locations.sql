@@ -9,4 +9,4 @@ select
     last_end_dt
       - interval '{{ var("delta_dt_h") }} hour'
       as last_dt
-from {{ source('core', 'dim_sensors' )}}
+from {{ source('core', 'located_sensors' )}}

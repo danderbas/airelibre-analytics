@@ -34,7 +34,7 @@ clean-logs: ## Clean logs
 
 clean-dbt: ## Clean dbt files
 	@echo "deleting dbt data..."
-	@dbt clean --project-dir dbt --no-clean-project-files-only
+	@docker run airelibre-analytics dbt clean --profiles-dir ./dbt --project-dir ./dbt --no-clean-project-files-only
 
 clean-db:  ## Delete DuckDB database
 	@echo "deleting duckdb database..."

@@ -104,18 +104,18 @@ def main():
         con.execute("CREATE SCHEMA IF NOT EXISTS core;")
 
         con.execute("""
-        CREATE OR REPLACE TABLE core.dim_sensors AS
+        CREATE OR REPLACE TABLE core.located_sensors AS
         SELECT * FROM sensors_df;
         """)
 
         con.execute("""
-        CREATE OR REPLACE TABLE core.fct_readings AS
+        CREATE OR REPLACE TABLE core.readings AS
         SELECT * FROM readings_df;
         """)
 
-    log_df_stats(__name__, sensors_df, "core.dim_sensors")
-    log_df_stats(__name__, readings_df, "core.fct_readings")
-    log.info("populated core layers table: core.dim_sensors and core.fct_readings")
+    log_df_stats(__name__, sensors_df, "core.located_sensors")
+    log_df_stats(__name__, readings_df, "core.readings")
+    log.info("populated core layers table: core.located_sensors and core.readings")
 
 
 def coords_match(
@@ -142,7 +142,7 @@ def assign_located_sensors(events: list[dict]) -> tuple[list[dict], list[dict]]:
     """
     located_sensors = []
     current_active_sensors = {}  # maps device_id -> active tracking dict
-    previous_event = None
+    previous_event = {}
 
     for e in events:
         device_id = e["device_id"]

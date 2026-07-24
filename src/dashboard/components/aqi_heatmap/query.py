@@ -17,7 +17,7 @@ def fetch() -> pd.DataFrame:
             *,
             STRFTIME(period_start, '%Y-%m-%d')
                 AS date_key
-        FROM main.mart_aqi_periods_stats
+        FROM main.mart_aqi_stats
         WHERE time_grain = '{temporal_granularity}'
             AND period_start >= '{date_start.strftime("%Y-%m-%d")}'
             AND period_end <= '{date_end.strftime("%Y-%m-%d")}'

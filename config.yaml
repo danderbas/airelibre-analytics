@@ -7,7 +7,7 @@ paths:
 ingestion:
   start_datetime: "2020-11-01T00:00:00Z"
   end_datetime: null # (null for end_datetime=now())
-  delta_hours: 1 # FIXED, DO NOT CHANGE (this is the standard)
+  delta_hours: 1 # FIXED - DO NOT CHANGE (this is the standard)
   requests:
     api_url: "https://api.airelib.re/api/v1/aqi"
     max_retries: 3
