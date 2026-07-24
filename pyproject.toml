@@ -1,0 +1,23 @@
+[project]
+name = "airelibre_analytics"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "requests",
+    "polars",
+    "duckdb",
+    "plotly",
+    "pandas",
+    "dbt-duckdb",
+    "pyyaml",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
