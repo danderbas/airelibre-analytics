@@ -1,0 +1,22 @@
+# config.yaml
+paths:
+  raw_dir: "data/raw"
+  db_path: "data/airelibre_dw.duckdb"
+  notebooks_dir: "notebooks"
+  dbt_dir: "dbt"
+
+ingestion:
+  start_datetime: "2020-11-01T00:00:00Z"
+  end_datetime: null # null = collect up to now, otherwise choose an end date
+  delta_hours: 1 # standard (fixed, do not change)
+  requests:
+    api_url: "https://api.airelib.re/api/v1/aqi"
+    max_retries: 3
+    backoff_base_seconds: 2
+    timeout_seconds: 5
+
+staging:
+  coord_decimal_precision: 4
+
+core:
+  coord_tolerance: 0.01 # ~1km of jitter is allowed in sensor location

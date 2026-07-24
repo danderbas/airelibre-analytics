@@ -1,0 +1,23 @@
+sources:
+  - name: core
+    schema: core
+    tables:
+      - name: dim_sensors
+        columns:
+          - name: located_sensor_id
+            tests: [unique, not_null]
+      - name: fct_readings
+        columns:
+          - name: lsid
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('core', 'dim_sensors')
+                    field: located_sensor_id
+                  config:
+                    severity: error
+          - name: dt
+            tests: [not_null]
+          - name: aqi
+            tests: [not_null]

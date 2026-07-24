@@ -1,69 +1,67 @@
+import logging
 import os
 from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | [%(levelname)s] :: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 
-def load_config():
-    CONFIG_PATH = os.environ.get(
+
+def _load_config() -> dict:
+    config_path = os.environ.get(
         "CONFIG_PATH", str(Path(__file__).parent.parent / "config.yaml")
     )
 
-    with open(CONFIG_PATH) as f:
-        return yaml.safe_load(f)
+    with open(config_path) as f:
+        config = yaml.safe_load(f)
 
+    def initialize_directories():
+        Path(config["paths"]["raw_dir"]).mkdir(parents=True, exist_ok=True)
+        Path(config["paths"]["db_path"]).parent.mkdir(parents=True, exist_ok=True)
 
-CONFIG = load_config()
+    def align_datetimes_to_hour():
+        def dt_floor_to_hour(val: str | datetime) -> datetime:
+            dt = datetime.fromisoformat(val) if isinstance(val, str) else val
+            return dt.replace(minute=0, second=0, microsecond=0)
 
+        raw_start = config["ingestion"]["start_datetime"]
+        raw_end = config["ingestion"].get("end_datetime") or datetime.now(timezone.utc)
 
-RAW_DIR = Path(CONFIG["paths"]["raw_dir"])
-RAW_DIR.mkdir(parents=True, exist_ok=True)
+        return (dt_floor_to_hour(raw_start), dt_floor_to_hour(raw_end))
 
-DUCKDB_PATH = Path(CONFIG["paths"]["duckdb_path"])
-DUCKDB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    def verify_assertions():
+        def dt_is_utc_z(dt: datetime) -> bool:
+            return dt.tzinfo is not None and dt.utcoffset().total_seconds() == 0
 
-
-assert CONFIG["requests"]["api_url"].startswith("http"), "api_url must be a full URL"
-
-assert CONFIG["requests"]["max_retries"] > 0
-assert CONFIG["requests"]["request_timeout"] > 0
-
-
-def dt_check_utc_aligned(dt_str: str) -> datetime:
-    dt = datetime.fromisoformat(dt_str)
-    if dt.tzinfo is None or dt.utcoffset().total_seconds() != 0:
-        raise ValueError(
-            f"'{dt_str}' must be UTC with 0 offset (ISO string ending in Z)"
+        assert dt_is_utc_z(START_DATETIME) and dt_is_utc_z(START_DATETIME), (
+            "datetimes should be utc with zero offset (iso strings ending with Z)"
         )
-    if dt.minute != 0 or dt.second != 0 or dt.microsecond != 0:
-        raise ValueError(
-            f"'{dt_str}' must be aligned to the hour, got {dt.isoformat()}"
+
+        assert START_DATETIME < END_DATETIME, (
+            "start_datetime must come before end_datetime"
         )
-    return dt
+
+        assert config["ingestion"]["delta_hours"] == 1, "delta_hours != 1 in config"
+
+        requests = config["ingestion"]["requests"]
+        assert requests["api_url"].startswith("http"), "api_url must be a full URL"
+        assert requests["max_retries"] > 0
+        assert requests["timeout_seconds"] > 0
+
+        assert 0 <= config["staging"]["coord_decimal_precision"] <= 8
+
+    initialize_directories()
+
+    START_DATETIME, END_DATETIME = align_datetimes_to_hour()
+
+    verify_assertions()
+
+    return config, START_DATETIME, END_DATETIME
 
 
-def dt_floor_to_hour(dt: datetime) -> datetime:
-    return dt.replace(minute=0, second=0, microsecond=0)
-
-
-assert CONFIG["collection"]["delta_hours"] == 1, "delta_hours != 1 in config"
-
-ALIGNED_START_DATETIME = dt_check_utc_aligned(CONFIG["collection"]["start_datetime"])
-ALIGNED_END_DATETIME = (
-    dt_check_utc_aligned(CONFIG["collection"]["end_datetime"])
-    if CONFIG["collection"]["end_datetime"]
-    else dt_floor_to_hour(datetime.now(timezone.utc))
-)
-
-assert ALIGNED_START_DATETIME < ALIGNED_END_DATETIME, (
-    "start_datetime must be before end_datetime"
-)
-
-CONFIG["collection"]["aligned_start_datetime"] = ALIGNED_START_DATETIME
-CONFIG["collection"]["aligned_end_datetime"] = ALIGNED_END_DATETIME
-
-assert 0 < CONFIG["staging"]["coord_tolerance"] < 1, (
-    "coord_tolerance should be a small degree value, not km/m"
-)
-assert 0 <= CONFIG["staging"]["coord_decimal_precision"] <= 8
+CONFIG, START_DATETIME, END_DATETIME = _load_config()
