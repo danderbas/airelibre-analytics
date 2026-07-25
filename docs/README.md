@@ -1,5 +1,3 @@
-# [airelibre-analytics](https://github.com/danderbas/airelibre-analytics#airelibre-analytics)
-
 Data pipeline + dashboard for historical Air Quality Index (AQI) data, from the [AireLibre](https://www.airelib.re) project
 
 ## Quickstart
