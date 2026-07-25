@@ -1,0 +1,3 @@
+remote_theme: andrewhwanpark/dark-poole
+plugins:
+- jekyll-remote-theme
