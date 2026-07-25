@@ -16,8 +16,8 @@ make all
 
 ## Acknowledgments
 
-- [**AireLibre**](https://www.airelib.re): the decentralized, community-driven air quality initiative
+- [**AireLibre**](https://www.airelib.re): the decentralized, community-driven air quality initiative. See more about the project [here](https://github.com/melizeche/AireLibre)
 - [**Linka**](https://github.com/tchx84/linka): the backend/API
 - **Red Descentralizada de Aire Libre (ReDAL)**: the volunteers building and maintaining the sensor network
 
-See more about the project [here](https://github.com/melizeche/AireLibre).
+
