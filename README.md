@@ -54,7 +54,7 @@ Once the terminal quiets down, you can point your browser to [http://localhost:8
 <details>
 <summary>Note:</summary> 
 
-some raw data (in the form of JSONL files) is already included in the `data/raw` folder. The current configuration is set so that the ingestion script will load some more data from AireLibre's backend [Linka](https://github.com/tchx84/linka), but not too much. You can change these settings in the `config.yaml` file, editing the values for `ingestion/{start,end}_datetime`.
+some raw data (in the form of JSONL files) is already included (compressed, in the `data` folder). The current configuration is set so that the ingestion script will load some more data from AireLibre's backend [Linka](https://github.com/tchx84/linka), but not too much. You can change these settings in the `config.yaml` file, editing the values for `ingestion/{start,end}_datetime`.
 </details>
 
 
@@ -65,6 +65,12 @@ It [started simple](./docs/markdown/exploration-start.md), in the terminal, fetc
 From there, the main tools for exploration were jupyter [notebooks](./docs/notebooks) (python, pandas, matplotlib; later polars+duckdb and plotly for the interactive plots).
 
 After iterating ~~a few times~~, it turned into a multi-schema ELT pipeline, with dbt-generated marts at the far end and a dashboard that queries them.
+
+### Exploratory Data Analysis (EDA) Notebooks
+
+- [PM Measurements](https://danderbas.github.io/airelibre-analytics/notebooks/eda_core.html/eda_pm_measurements.html)
+- [Raw data exploration](https://danderbas.github.io/airelibre-analytics/notebooks/eda_raw.html)
+- [Processed data analysis](https://danderbas.github.io/airelibre-analytics/notebooks/eda_core.html)
 
 ## Stack
 

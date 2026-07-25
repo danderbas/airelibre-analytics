@@ -8,8 +8,10 @@ help: ## Show this help message
 all: decompress-data build-docker run-pipeline serve-dashboard ## Build -> Run pipeline -> Serve dashboard 
 
 decompress-data:  ## Decompress sample data
-	@echo "decompressing sample data..."
-	@tar -xzvf ./data/data.tar.gz -C ./data
+	@if [ ! -d ./data/raw ]; then \
+		echo "decompressing sample data..."; \
+		tar -xzvf ./data/data.tar.gz -C ./data; \
+	fi
 
 build-docker: ## Build services
 	docker compose build
