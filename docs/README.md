@@ -10,8 +10,6 @@ cd airelibre-analytics
 make all
 ```
 
-Then open the in [your local machine](http://localhost:8501).
-
 ### Notebooks
 
 - [PM Measurements](./notebooks/eda_pm_measurements.html)
