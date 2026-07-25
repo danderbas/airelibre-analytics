@@ -14,7 +14,7 @@ Then open the in [your local machine](http://localhost:8501).
 
 ### Notebooks
 
-- [PM Measurements](./notebooks/eda_core.html/eda_pm_measurements.html)
+- [PM Measurements](./notebooks/eda_pm_measurements.html)
 - [Raw data exploration](./notebooks/eda_raw.html)
 - [Processed data analysis](./notebooks/eda_core.html)
 
