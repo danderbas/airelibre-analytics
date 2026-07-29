@@ -263,29 +263,33 @@ What the sensors measure is roughly particle concentrations, which is used a pro
 
 The idea is: if the concentration is in a given range, the AQI (air quality index) is between this and that value, and we draw a straight line to map concentration to AQI. Depending on the range, the slope changes and basically this is why it is non-linear. (It's piece-wise linear actually).
 
-<details>
+<details markdown="1">
 <summary>If one goes deeper...</summary>
 
-The range tables actually map densities ($` \mu g / m^3 `$) to index values (not concentrations, that'd be $` N/m^3 `$) and what table to use also depends on the particle sizes.
+The range tables actually map densities (µg/m³) to index values (not concentrations, that'd be (N/m³) and what table to use also depends on the particle sizes.
 
-For PM2.5 particles (that is, particles with diameter $` <= 2.5 \mu m'$), the table is
+For PM2.5 particles (that is, particles with diameter <= 2.5 µm), the table is
 
-AQI Range | PM2.5 [$` \mu g / m^3 `$]
+
+AQI Range | PM2.5 [µg/m³]
 --|--
-| 0–50     | 0–12.0       |
-| 51–100   | 12.1–35.4    |
-| 101–150  | 35.5–55.4    |
-| 151–200  | 55.5–150.4   |
-| 201–300  | 150.5–250.4  |
-| 301–400  | 250.5–350.4  |
-| 401–500  | 350.5–500.4  |
+0–50     | 0–12.0       
+51–100   | 12.1–35.4   
+101–150  | 35.5–55.4    
+151–200  | 55.5–150.4   
+201–300  | 150.5–250.4  
+301–400  | 250.5–350.4  
+401–500  | 350.5–500.4  
+
 
 (if higher than 500.4, it's reported as 500+)
+
 
 ```bash
 printf "0 0\n12 50\n35.4 100\n55.4 150\n150.4 200\n250.4 300\n350.4 400\n500.4 500\n" \
 | gnuplot -e "set terminal dumb; set xlabel 'PM2.5 (ug/m3)'; set ylabel 'AQI'; plot '-' u 1:2 w l notitle"
 ```
+
 
 ```
      500 +-----------------------------------------------------------------+   
@@ -311,6 +315,7 @@ printf "0 0\n12 50\n35.4 100\n55.4 150\n150.4 200\n250.4 300\n350.4 400\n500.4 5
          0         100        200        300        400        500        600  
                                     PM2.5 (ug/m3)                              
 ```
+
 
 While the high grade sensors do catch, filter and weight particles, the ones used by the AireLibre project (e.g., PMS7003, listed above) mainly count particles and estimates sizes/masses by how the particles scatter light.
 

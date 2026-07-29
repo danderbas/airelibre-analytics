@@ -1,7 +1,2 @@
-remote_theme: pages-themes/minimal@v0.2.0
-plugins:
-  - jekyll-remote-theme
-title: ""
-tagline: ""
-description: ""
-show_downloads: false
+markdown: kramdown
+highlighter: rouge

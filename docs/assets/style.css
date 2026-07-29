@@ -1,0 +1,160 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000000;
+  color: #d3d3d3;
+  font-family: monospace;
+  font-size: 18px;
+  line-height: 1.6;
+  padding: 2rem;
+  max-width: 80%;//800px;
+  margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #ff0000;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: #ff0000;
+  text-decoration: none;
+}
+
+li a {
+  color: #bbbbbb;
+}
+
+a:hover {
+  color: #ff6666;
+}
+
+/*
+pre {
+  background-color: #111111;
+  color: #d3d3d3;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+code {
+  background-color: #111111;
+  color: #ff6666;
+  border: 1px solid #333333;
+  border-radius: 3px;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.9em;
+}
+*/
+
+blockquote {
+  border-left: 3px solid #ff0000;
+  padding-left: 1rem;
+  color: #999999;
+  margin: 1rem 0;
+}
+
+ul, ol {
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+img {
+  display: block;
+  max-width: 85%;
+  height: auto;
+  margin: 1rem auto;
+  border: 1px solid #333333;
+  border-radius: 4px;
+}
+
+#diagram {
+  overflow: scroll;
+  font-size: 0.8rem;
+
+
+  max-width: 85%;
+  margin: 1rem auto;
+  overflow: scroll;
+  background-color: #111111;
+  color: #d3d3d3;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+th, td {
+  border: 1px solid #333333;
+  padding: 0.5rem 0.8rem;
+  text-align: left;
+}
+
+th {
+  background-color: #111111;
+  color: #ff0000;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #0a0a0a;
+}
+
+tr:hover {
+  background-color: #1a1a1a;
+}
+
+
+details {
+  border: 1px solid #333333;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  background-color: #0a0a0a;
+}
+
+summary {
+  cursor: pointer;
+  color: #ff0000;
+  font-weight: bold;
+  padding: 0.3rem 0;
+}
+
+summary:hover {
+  color: #ff6666;
+}
+
+details[open] summary {
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #333333;
+  padding-bottom: 0.5rem;
+}

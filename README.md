@@ -135,7 +135,7 @@ The dashboard queries the mart tables directly to render the visualizations.
 
 ## Mart tables
 
-**The table** includes dimensions+facts per unit: id, type, description/location, first/last reading, lifespan and coverage (during its lifespan, what fraction of the time actually has data).
+**The tables** include dimensions+facts per unit: id, type, description/location, first/last reading, lifespan and coverage (during its lifespan, what fraction of the time actually has data).
 
 ### Units: locations|areas (`mart_units`)
 
@@ -198,7 +198,7 @@ This project wouldn't exist without:
 - [**Linka**](https://github.com/tchx84/linka): the backend/API that receives sensor measurements and that the pipeline's ingestion step queries directly
 - **Red Descentralizada de Aire Libre (ReDAL)**: the volunteers building and maintaining the physical sensor network that actually produces the data
 
-AireLibre is itself an umbrella-project for several independent sub-projects (firmware, mobile apps, a Twitter bot, etc). See the [full list](https://github.com/melizeche/AireLibre#proyectos-bajo-el-paraguas-de-airelibre)!
+AireLibre is itself an umbrella-project for several independent sub-projects (firmware, mobile apps, a Twitter bot, etc). See the full list [here](https://github.com/melizeche/AireLibre#proyectos-bajo-el-paraguas-de-airelibre).
 
 
 ## License
